@@ -66,7 +66,7 @@ class PasienController extends Controller
                                 ->first();
 
         if ($existingPasien) {
-            return redirect()->route('pasien.register')
+            return redirect()->route('pasien.registerForm')
                              ->withErrors(['nama' => 'Nama dan Alamat sudah terdaftar.']);
         }
 
@@ -83,6 +83,6 @@ class PasienController extends Controller
             'no_rm' => $newNoRm, // Menambahkan no_rm otomatis
         ]);
 
-        return redirect()->route('pasien.register')->with('success', 'Pasien berhasil didaftarkan!');
+        return redirect()->route('pasien.registerForm')->with('success', 'Pasien berhasil didaftarkan!');
     }
 }
