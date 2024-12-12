@@ -1,10 +1,10 @@
+<!-- Example admin dashboard view -->
 @extends('layouts.app')
 
-@section('title', 'Dashboard Admin')
-
 @section('content')
-    <div class="container py-5">
-        <h3>Selamat datang, Admin!</h3>
-        <p>Ini adalah halaman dashboard admin.</p>
-    </div>
+    <h1>Dashboard Admin</h1>
+    <!-- Admin-specific content goes here -->
+
+    <!-- Logout Link -->
+    <a href="{{ route('logout.admin') }}" class="btn btn-danger">Logout</a>
 @endsection

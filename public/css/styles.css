@@ -660,6 +660,12 @@ progress {
     color: #6c757d;
 }
 
+.containerFull {
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+.containerFull,
 .container,
 .container-fluid,
 .container-xxl,
@@ -714,6 +720,18 @@ progress {
     .container-sm,
     .container {
         max-width: 1320px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container-xxl,
+    .container-xl,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container,
+    .containerFull{
+        max-width: 100%;
     }
 }
 .row {

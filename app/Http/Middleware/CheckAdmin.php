@@ -16,7 +16,7 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        // Cek jika session user_role adalah 'admin'
+        // Check if the session user_role is 'admin'
         if (session('user_role') !== 'admin') {
             return redirect()->route('home')->withErrors(['error' => 'Anda tidak memiliki akses ke halaman ini.']);
         }

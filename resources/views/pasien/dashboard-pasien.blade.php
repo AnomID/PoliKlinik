@@ -1,10 +1,10 @@
+<!-- Example pasien dashboard view -->
 @extends('layouts.app')
 
-@section('title', 'Dashboard Pasien')
-
 @section('content')
-    <div class="container py-5">
-        <h3>Selamat datang, {{ session('pasien_nama') }}</h3>
-        <p>Ini adalah halaman dashboard pasien.</p>
-    </div>
+    <h1>Dashboard Pasien</h1>
+    <!-- Pasien-specific content goes here -->
+
+    <!-- Logout Link -->
+    <a href="{{ route('logout.pasien') }}" class="btn btn-danger">Logout</a>
 @endsection

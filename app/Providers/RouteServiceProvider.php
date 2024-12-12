@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckDokter;
+use App\Http\Middleware\CheckPasien;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -16,18 +19,10 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        // Mendefinisikan route groups dengan middleware
-        Route::middlewareGroup('admin', [
-            \App\Http\Middleware\CheckAdmin::class,
-        ]);
-
-        Route::middlewareGroup('dokter', [
-            \App\Http\Middleware\CheckDokter::class,
-        ]);
-
-        Route::middlewareGroup('pasien', [
-            \App\Http\Middleware\CheckPasien::class,
-        ]);
+        // Define middleware aliases
+        Route::aliasMiddleware('admin', CheckAdmin::class);
+        Route::aliasMiddleware('dokter', CheckDokter::class);
+        Route::aliasMiddleware('pasien', CheckPasien::class);
     }
 
     /**

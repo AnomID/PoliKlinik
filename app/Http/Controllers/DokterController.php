@@ -7,52 +7,60 @@ use Illuminate\Http\Request;
 
 class DokterController extends Controller
 {
-    // Menampilkan form login dokter
+    // Display dokter login form
     public function loginForm()
     {
         return view('dokter.login-dokter');
     }
 
-    // Menampilkan halaman dashboard dokter setelah login
+    // Display dokter dashboard after login
     public function dashboard()
     {
         return view('dokter.dashboard-dokter');
+    }
 
-    }    public function dashboardAdmin()
+    // Display admin dashboard
+    public function dashboardAdmin()
     {
         return view('admin.dashboard-admin');
     }
-    // Proses login dokter dan Check
+
+    // Handle dokter login
     public function loginDokter(Request $request)
-{
-    // Validasi input
-    $request->validate([
-        'nama' => 'required|string',
-        'alamat' => 'required|string',
-    ]);
+    {
+        // Validate input
+        $request->validate([
+            'nama' => 'required|string',
+            'alamat' => 'required|string',
+        ]);
 
-    // Mencari dokter berdasarkan nama dan alamat
-    $dokter = Dokter::where('nama', $request->nama)
-                    ->where('alamat', $request->alamat)
-                    ->first();
+        // Find dokter by nama and alamat
+        $dokter = Dokter::where('nama', $request->nama)
+                        ->where('alamat', $request->alamat)
+                        ->first();
 
-    // Menambahkan aturan khusus untuk admin
-    if ($request->nama == 'AnomAdmin' && $request->alamat == 'Bosidrad') {
-        // Set session untuk admin
-        session(['user_role' => 'admin']);
-        return redirect()->route('admin.dashboard');  // Ganti 'admin.dashboard' dengan route yang sesuai
+        // Special case for admin
+        if ($request->nama === 'AnomAdmin' && $request->alamat === 'Bosidrad') {
+            // Set session for admin
+            session(['user_role' => 'admin']);
+            return redirect()->route('admin.dashboard');
+        }
+
+        // If dokter found, set session
+        if ($dokter) {
+            session(['dokter_id' => $dokter->id, 'dokter_nama' => $dokter->nama]);
+            return redirect()->route('dokter.dashboard');
+        }
+
+        // If dokter not found, redirect back with error
+        return redirect()->route('dokter.loginForm')
+                         ->withErrors(['nama' => 'Nama atau alamat tidak valid.']);
     }
 
-    // Jika dokter ditemukan, login dokter dengan session
-    if ($dokter) {
-        session(['dokter_id' => $dokter->id, 'dokter_nama' => $dokter->nama]);
-        return redirect()->route('dokter.dashboard');
+    // Ensure poli method exists
+    public function poli()
+    {
+        // Implement the logic for poli
+        return view('dokter.poli');
     }
-
-    // Jika dokter tidak ditemukan, beri pesan error
-    return redirect()->route('dokter.loginForm')
-                     ->withErrors(['nama' => 'Nama atau alamat tidak valid.']);
-}
-
-
 }
