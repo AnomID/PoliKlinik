@@ -247,8 +247,28 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                                                <!-- Admin Links -->
+                    @if(session('user_role') === 'admin')
+                        <!-- Add more admin-specific links here -->
+                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                    >Admin</span
+                        @endif
+
+                    <!-- Dokter Links -->
+                    @if(session('dokter_id'))
+                        <!-- Add more dokter-specific links here -->
+                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                            Dokter
+                        </span>
+                        @endif
+
+                    <!-- Pasien Links -->
+                    @if(session('pasien_id'))
+                        <!-- Add more pasien-specific links here -->
+                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"
                     >Douglas McGee</span
+                        @endif
+
                   >
                   <img
                     class="img-profile rounded-circle"

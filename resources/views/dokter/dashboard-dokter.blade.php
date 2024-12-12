@@ -1,10 +1,10 @@
-<!-- Example dokter dashboard view -->
-@extends('layouts.app')
+<!-- Example admin dashboard view -->
+@extends('layouts.app-dashboard')
 
 @section('content')
-    <h1>Dashboard Dokter</h1>
-    <!-- Dokter-specific content goes here -->
+    {{-- <h1>Dashboard Dokter {{ Auth::user()->nama }}</h1> --}}
+    <!-- Admin-specific content goes here -->
 
     <!-- Logout Link -->
-    <a href="{{ route('logout.dokter') }}" class="btn btn-danger">Logout</a>
+    <a href="{{ route('logout.admin') }}" class="btn btn-danger">Logout</a>
 @endsection

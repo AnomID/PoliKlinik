@@ -1,5 +1,5 @@
 <!-- Example admin dashboard view -->
-@extends('layouts.app')
+@extends('layouts.app-dashboard')
 
 @section('content')
     <h1>Dashboard Admin</h1>
