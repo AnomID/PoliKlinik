@@ -2,9 +2,9 @@
 @extends('layouts.app-dashboard')
 
 @section('content')
-    {{-- <h1>Dashboard Dokter {{ Auth::user()->nama }}</h1> --}}
+    {{-- <>Dashboard Dokter {{ Auth::user()->nama }}
     <!-- Admin-specific content goes here -->
 
-    <!-- Logout Link -->
-    <a href="{{ route('logout.admin') }}" class="btn btn-danger">Logout</a>
+    <!-- Logout Link --> --}}
+    <a href="{{ route('logout.dokter') }}" class="btn btn-danger">Logout</a>
 @endsection

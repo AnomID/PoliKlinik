@@ -11,7 +11,7 @@ class Obat extends Model
 
     protected $table = 'obat';
 
-    protected $fillable = ['nama_obat', 'kemasan', 'harga'];
+    protected $fillable = ['nama_obat', 'kemasan', 'harga', 'stok']; // Menambahkan 'stok'
 
     public function detailPeriksa()
     {

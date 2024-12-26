@@ -17,6 +17,12 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0" />
     <!-- Nav Item - Dashboard -->
+    {{-- <li class="nav-item {{ Request::is('admin/dashboard') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>{{ session('nama') }}</span>
+        </a>
+    </li> --}}
     <li class="nav-item {{ Request::is('admin/dashboard') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -43,7 +49,7 @@
             aria-controls="collapseDokter"
         >
             <i class="nav-icon fas fa-user-md"></i>
-            <span>Dokter</span>
+            <span>Jadwal Periksa</span>
         </a>
         <div
             id="collapseDokter"
@@ -53,8 +59,8 @@
         >
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Manajemen Dokter:</h6>
-                <a class="collapse-item {{ Request::is('admin/dokter') ? 'active' : '' }}" href="{{ route('admin.dokter.index') }}">Daftar Dokter</a>
-                <a class="collapse-item {{ Request::is('admin/dokter/create') ? 'active' : '' }}" href="{{ route('admin.dokter.create') }}">Tambah Dokter</a>
+                <a class="collapse-item {{ Request::is('admin/dokter') ? 'active' : '' }}" href="{{ route('dokter.jadwal.index') }}">Daftar Jadwal Periksa</a>
+                <a class="collapse-item {{ Request::is('admin/dokter/create') ? 'active' : '' }}" href="{{ route('dokter.jadwal.create') }}">Tambah Jadwal Periksa</a>
             </div>
         </div>
     </li>
@@ -70,7 +76,7 @@
             aria-controls="collapsePasien"
         >
             <i class="nav-icon fas fa-user-injured"></i>
-            <span>Pasien</span>
+            <span>Periksa Pasien</span>
         </a>
         <div
             id="collapsePasien"
@@ -97,7 +103,7 @@
             aria-controls="collapsePoli"
         >
             <i class="nav-icon fas fa-hospital"></i>
-            <span>Poli</span>
+            <span>Riwayat Pasien</span>
         </a>
         <div
             id="collapsePoli"
@@ -124,7 +130,7 @@
             aria-controls="collapseObat"
         >
             <i class="nav-icon fas fa-pills"></i>
-            <span>Obat</span>
+            <span>Profile</span>
         </a>
         <div
             id="collapseObat"

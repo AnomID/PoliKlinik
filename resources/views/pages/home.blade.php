@@ -1,11 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Home - Sistem Temu Janji Pasien')  <!-- Updated to your application's name -->
-
+@section('title', 'Home - Sistem Temu Janji Pasien')
 @section('content')
     <!-- Hero Section -->
     <section id="hero" class="vh-100 d-flex align-items-center" style="background: url('{{ asset('assets/klinikUdinus.jpg') }}') no-repeat center center/cover;">
-        <div class="container text-center text-white">
+        <div class="container text-center text-black">
             <h1 class="display-4 fw-bold">Selamat Datang di Sistem Pendaftaran Pasien dan Dokter</h1>
             <p class="lead mb-4">Mudah, Cepat, dan Terpercaya untuk Pendaftaran dan Pelayanan Kesehatan Anda</p>
             <a href="#login" class="btn btn-lg btn-primary">Mulai Sekarang</a>

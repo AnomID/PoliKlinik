@@ -1,5 +1,5 @@
 <!-- Example pasien dashboard view -->
-@extends('layouts.app')
+@extends('layouts.app-dashboard')
 
 @section('content')
     <h1>Dashboard Pasien</h1>

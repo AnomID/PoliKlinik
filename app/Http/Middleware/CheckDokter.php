@@ -18,7 +18,7 @@ class CheckDokter
     {
         // Cek jika session dokter_id ada, berarti dokter yang login
         if (!session('dokter_id')) {
-            return redirect()->route('dokter.loginForm')->withErrors(['error' => 'Anda tidak memiliki akses ke halaman ini.']);
+            return redirect()->route('dokter.loginForm')->withErrors(['error' => 'Anda tidak memiliki akses ke halaman dokter.']);
         }
 
         return $next($request);

@@ -10,7 +10,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Poliklinik - Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link
@@ -31,7 +31,11 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
       <!-- Sidebar -->
+    @if(session('user_role') === 'admin')
       @include('components.sidebar')
+      @elseif(session('dokter_id'))
+        @include('components.sidebar-dokter')
+      @endif
       <!-- End of Sidebar -->
 
       <!-- Content Wrapper -->
@@ -44,7 +48,7 @@
           <!-- Begin Page Content -->
           <div class="container-fluid">
             <!-- Page Heading -->
-            @include('components.page-heading')
+            {{-- @include('components.page-heading') --}}
             <!-- End of Page Heading -->
              <!-- Main Content -->
              @yield('content')

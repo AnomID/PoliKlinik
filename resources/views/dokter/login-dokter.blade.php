@@ -92,11 +92,7 @@
                         </form>
 
                         <!-- Additional Links -->
-                        <div class="mt-4 text-center">
-                            <p>Belum punya akun? <a href="{{ route('pasien.registerForm') }}">Daftar di sini</a>.</p>
-                            {{-- Optional: Add password reset link if implemented --}}
-                            {{-- <p><a href="{{ route('password.request') }}">Lupa Password?</a></p> --}}
-                        </div>
+
                     </div>
                 </div>
                 <!-- Card End -->
