@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\PoliController as AdminPoliController;
 use App\Http\Controllers\Admin\ObatController as AdminObatController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Dokter\JadwalPeriksaController;
+use App\Http\Controllers\Dokter\PeriksaPasienController;
+use App\Http\Controllers\Pasien\DaftarPoliController;
 // use App\Http\Controllers\PasienController as ControllersPasienController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,12 +56,10 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 Route::middleware('dokter')->prefix('dokter')->name('dokter.')->group(function () {
     Route::get('/dashboard', [DokterController::class, 'dashboard'])->name('dashboard');
     Route::get('/poli', [DokterController::class, 'poli'])->name('poli');
-    Route::get('/jadwal', [JadwalPeriksaController::class, 'index'])->name('jadwal.index');
-    Route::get('/jadwal/create', [JadwalPeriksaController::class, 'create'])->name('jadwal.create');
-    Route::post('/jadwal', [JadwalPeriksaController::class, 'store'])->name('jadwal.store');
-    Route::get('/jadwal/{jadwalPeriksa}/edit', [JadwalPeriksaController::class, 'edit'])->name('jadwal.edit');
-    Route::put('/jadwal/{jadwalPeriksa}', [JadwalPeriksaController::class, 'update'])->name('jadwal.update');
-    Route::delete('/jadwal/{jadwalPeriksa}', [JadwalPeriksaController::class, 'destroy'])->name('jadwal.destroy');
+
+    Route::resource('jadwal', JadwalPeriksaController::class);
+
+    Route::resource('periksa', PeriksaPasienController::class);
 });
 
 // Pasien Routes (Protected by 'pasien' middleware)
@@ -67,6 +67,7 @@ Route::middleware('pasien')->prefix('pasien')->name('pasien.')->group(function (
     Route::get('/dashboard', [PasienController::class, 'dashboard'])->name('dashboard');
     Route::get('/daftar-periksa', [PasienController::class, 'daftarPeriksa'])->name('daftar.periksa');
 
+    Route::resource('daftar', DaftarPoliController::class);
 });
 
 // Logout Routes

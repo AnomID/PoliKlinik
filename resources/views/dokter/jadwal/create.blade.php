@@ -1,7 +1,5 @@
 
 @extends('layouts.app-dashboard')
-// resources/views/dokter/jadwal/create.blade.php
-
 @section('title', 'Tambah Jadwal Periksa')
 
 @section('content')
@@ -19,14 +17,11 @@
         <div class="card-body">
             <form action="{{ route('dokter.jadwal.store') }}" method="POST">
                 @csrf
-                <div class="form-group">
-                    <label for="id_dokter">Dokter</label>
-                    <select class="form-control" id="id_dokter" name="id_dokter" required>
-                        @foreach($dokter as $d)
-                            <option value="{{ $d->id }}">{{ $d->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="dokter_name">Nama Dokter</label>
+                <input type="text" class="form-control" id="dokter_name" name="dokter_name" value="{{ $dokter->nama }}" readonly>
+                <input type="hidden" name="id_dokter" value="{{ $dokter->id }}">
+            </div>
                 <div class="form-group">
                     <label for="hari">Hari</label>
                     <select class="form-control" id="hari" name="hari" required>

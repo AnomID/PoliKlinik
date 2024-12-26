@@ -35,6 +35,8 @@
       @include('components.sidebar')
       @elseif(session('dokter_id'))
         @include('components.sidebar-dokter')
+        @elseif(session('pasien_id'))
+          @include('components.sidebar-pasien')
       @endif
       <!-- End of Sidebar -->
 
