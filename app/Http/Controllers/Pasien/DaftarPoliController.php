@@ -4,133 +4,181 @@ namespace App\Http\Controllers\Pasien;
 
 use App\Http\Controllers\Controller;
 use App\Models\DaftarPoli;
-use App\Models\Pasien;
 use App\Models\JadwalPeriksa;
+use App\Models\Poli;
 use Illuminate\Http\Request;
+
 
 class DaftarPoliController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar semua pendaftaran poli untuk pasien yang login.
      */
     public function index()
     {
-        // Ambil data daftar poli hanya milik pasien yang login
-        $pasienId = session('pasien_id'); // Ambil ID pasien dari session
-        if (!$pasienId) {
-            return redirect()->route('pasien.loginForm')->withErrors(['error' => 'Anda harus login terlebih dahulu.']);
-        }
-
-        $daftarPoli = DaftarPoli::where('id_pasien', $pasienId)->with(['jadwalPeriksa.dokter'])->get();
+        $pasien_id = session('pasien_id');
+        $daftarPoli = DaftarPoli::with(['pasien', 'jadwalPeriksa.dokter.poli'])
+            ->where('id_pasien', $pasien_id)
+            ->get();
 
         return view('pasien.daftar.index', compact('daftarPoli'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan formulir untuk membuat pendaftaran poli baru.
      */
     public function create()
     {
-        // Ambil ID pasien dari session
-        $pasienId = session('pasien_id');
-        if (!$pasienId) {
-            return redirect()->route('pasien.loginForm')->withErrors(['error' => 'Anda harus login terlebih dahulu.']);
-        }
+        $pasien = \App\Models\Pasien::find(session('pasien_id'));
+        $polis = Poli::all();
 
-        // Ambil jadwal periksa yang tersedia
-        $jadwalPeriksa = JadwalPeriksa::with('dokter')->get();
-
-        return view('pasien.daftar.create', compact('jadwalPeriksa', 'pasienId'));
+        return view('pasien.daftar.create', compact('pasien', 'polis'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan pendaftaran poli baru ke dalam database.
      */
     public function store(Request $request)
     {
         $request->validate([
             'id_jadwal' => 'required|exists:jadwal_periksa,id',
-            'keluhan' => 'required|string|max:255',
+            'keluhan' => 'required|string',
         ]);
 
-        $pasienId = session('pasien_id'); // Ambil ID pasien dari session
-        if (!$pasienId) {
-            return redirect()->route('pasien.loginForm')->withErrors(['error' => 'Anda harus login terlebih dahulu.']);
+        // Verifikasi bahwa jadwal_periksa sesuai dengan poli yang dipilih
+        $jadwalPeriksa = JadwalPeriksa::with('dokter.poli')->findOrFail($request->id_jadwal);
+        $poli_id = $request->input('id_poli'); // Pastikan Anda mengirim 'id_poli' dari formulir
+
+        if ($jadwalPeriksa->dokter->poli->id != $poli_id) {
+            return back()->withErrors(['id_jadwal' => 'Jadwal periksa yang dipilih tidak sesuai dengan poli yang dipilih.'])->withInput();
         }
 
-        // Buat nomor antrian
+        // Generate no_antrian
         $lastAntrian = DaftarPoli::where('id_jadwal', $request->id_jadwal)->max('no_antrian');
         $noAntrian = $lastAntrian ? $lastAntrian + 1 : 1;
 
         DaftarPoli::create([
-            'id_pasien' => $pasienId,
+            'id_pasien' => session('pasien_id'),
             'id_jadwal' => $request->id_jadwal,
             'keluhan' => $request->keluhan,
             'no_antrian' => $noAntrian,
         ]);
 
-        return redirect()->route('daftar.index')->with('success', 'Pendaftaran berhasil!');
+        return redirect()->route('pasien.daftar.index')->with('success', 'Pendaftaran poli berhasil ditambahkan.');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Menampilkan detail pendaftaran poli tertentu.
+     */
+    public function show($id)
+    {
+        $daftarPoli = DaftarPoli::with(['pasien', 'jadwalPeriksa.dokter.poli', 'periksa'])
+            ->findOrFail($id);
+
+        // Pastikan pendaftaran poli milik pasien yang sedang login
+        if ($daftarPoli->id_pasien != session('pasien_id')) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        return view('pasien.daftar.show', compact('daftarPoli'));
+    }
+
+    /**
+     * Menampilkan formulir untuk mengedit pendaftaran poli tertentu.
      */
     public function edit($id)
     {
-        $daftarPoli = DaftarPoli::findOrFail($id);
+        $daftarPoli = DaftarPoli::with(['jadwalPeriksa.dokter.poli'])->findOrFail($id);
 
-        // Pastikan hanya pasien yang terkait dapat mengedit
-        $pasienId = session('pasien_id');
-        if ($daftarPoli->id_pasien != $pasienId) {
-            return redirect()->route('daftar.index')->withErrors(['error' => 'Anda tidak memiliki izin untuk mengedit pendaftaran ini.']);
+        // Pastikan pendaftaran poli milik pasien yang sedang login
+        if ($daftarPoli->id_pasien != session('pasien_id')) {
+            abort(403, 'Aksi tidak diizinkan.');
         }
 
-        $jadwalPeriksa = JadwalPeriksa::with('dokter')->get();
+        $polis = Poli::all();
+        $selectedPoliId = $daftarPoli->jadwalPeriksa->dokter->poli->id;
+        $jadwalPeriksas = JadwalPeriksa::whereHas('dokter', function($query) use ($selectedPoliId) {
+            $query->where('id_poli', $selectedPoliId);
+        })->with('dokter')->get();
 
-        return view('pasien.daftar.edit', compact('daftarPoli', 'jadwalPeriksa'));
+        return view('pasien.daftar.edit', compact('daftarPoli', 'polis', 'jadwalPeriksas'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Memperbarui pendaftaran poli tertentu dalam database.
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'id_jadwal' => 'required|exists:jadwal_periksa,id',
-            'keluhan' => 'required|string|max:255',
-        ]);
-
         $daftarPoli = DaftarPoli::findOrFail($id);
 
-        // Pastikan hanya pasien yang terkait dapat mengupdate
-        $pasienId = session('pasien_id');
-        if ($daftarPoli->id_pasien != $pasienId) {
-            return redirect()->route('daftar.index')->withErrors(['error' => 'Anda tidak memiliki izin untuk mengupdate pendaftaran ini.']);
+        // Pastikan pendaftaran poli milik pasien yang sedang login
+        if ($daftarPoli->id_pasien != session('pasien_id')) {
+            abort(403, 'Aksi tidak diizinkan.');
         }
 
+        $request->validate([
+            'id_jadwal' => 'required|exists:jadwal_periksa,id',
+            'keluhan' => 'required|string',
+        ]);
+
+        // Verifikasi bahwa jadwal_periksa sesuai dengan poli yang dipilih
+        $jadwalPeriksa = JadwalPeriksa::with('dokter.poli')->findOrFail($request->id_jadwal);
+        $poli_id = $request->input('id_poli'); // Pastikan Anda mengirim 'id_poli' dari formulir
+
+        if ($jadwalPeriksa->dokter->poli->id != $poli_id) {
+            return back()->withErrors(['id_jadwal' => 'Jadwal periksa yang dipilih tidak sesuai dengan poli yang dipilih.'])->withInput();
+        }
+
+        // Update data
         $daftarPoli->update([
             'id_jadwal' => $request->id_jadwal,
             'keluhan' => $request->keluhan,
+            // 'no_antrian' bisa diperbarui jika diperlukan
         ]);
 
-        return redirect()->route('daftar.index')->with('success', 'Pendaftaran berhasil diperbarui!');
+        return redirect()->route('pasien.daftar.index')->with('success', 'Pendaftaran poli berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus pendaftaran poli tertentu dari database.
      */
     public function destroy($id)
     {
         $daftarPoli = DaftarPoli::findOrFail($id);
 
-        // Pastikan hanya pasien yang terkait dapat menghapus
-        $pasienId = session('pasien_id');
-        if ($daftarPoli->id_pasien != $pasienId) {
-            return redirect()->route('daftar.index')->withErrors(['error' => 'Anda tidak memiliki izin untuk menghapus pendaftaran ini.']);
+        // Pastikan pendaftaran poli milik pasien yang sedang login
+        if ($daftarPoli->id_pasien != session('pasien_id')) {
+            abort(403, 'Aksi tidak diizinkan.');
         }
 
         $daftarPoli->delete();
 
-        return redirect()->route('daftar.index')->with('success', 'Pendaftaran berhasil dihapus!');
+        return redirect()->route('pasien.daftar.index')->with('success', 'Pendaftaran poli berhasil dihapus.');
+    }
+
+    /**
+     * Mengambil jadwal_periksa berdasarkan poli yang dipilih (untuk AJAX).
+     */
+
+    public function getJadwalPeriksa($poli_id)
+    {
+        // Log untuk debugging
+        Log::info('Meminta jadwal_periksa untuk poli_id: ' . $poli_id);
+
+        // Pastikan Poli ada
+        $poli = Poli::find($poli_id);
+        if (!$poli) {
+            Log::error('Poli tidak ditemukan: ' . $poli_id);
+            return response()->json(['error' => 'Poli tidak ditemukan'], 404);
+        }
+
+        // Ambil jadwal_periksa berdasarkan poli
+        $jadwal = JadwalPeriksa::whereHas('dokter', function($query) use ($poli_id) {
+            $query->where('id_poli', $poli_id);
+        })->with('dokter')->get();
+
+        Log::info('Jumlah jadwal_periksa yang ditemukan: ' . $jadwal->count());
+
+        return response()->json($jadwal);
     }
 }

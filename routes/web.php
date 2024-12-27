@@ -67,9 +67,12 @@ Route::middleware('pasien')->prefix('pasien')->name('pasien.')->group(function (
     Route::get('/dashboard', [PasienController::class, 'dashboard'])->name('dashboard');
     Route::get('/daftar-periksa', [PasienController::class, 'daftarPeriksa'])->name('daftar.periksa');
 
+    // Resource routes untuk DaftarPoliController
     Route::resource('daftar', DaftarPoliController::class);
-});
 
+    // Rute tambahan untuk AJAX mengambil jadwal_periksa
+    Route::get('daftar/get-jadwal/{poli_id}', [DaftarPoliController::class, 'getJadwalPeriksa'])->name('daftar.get-jadwal');
+});
 // Logout Routes
 Route::prefix('logout')->name('logout.')->group(function () {
     Route::get('/admin', [AuthController::class, 'logoutAdmin'])->name('admin');
