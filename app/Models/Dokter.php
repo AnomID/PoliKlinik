@@ -13,6 +13,8 @@ class Dokter extends Model
 
     protected $fillable = ['nama', 'alamat', 'no_hp', 'id_poli'];
 
+    public $timestamps = true;
+
     public function poli()
     {
         return $this->belongsTo(Poli::class, 'id_poli');

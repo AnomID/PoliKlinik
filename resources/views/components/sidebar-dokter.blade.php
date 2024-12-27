@@ -86,8 +86,9 @@
         >
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Manajemen Pasien:</h6>
-                <a class="collapse-item {{ Request::is('admin/pasien') ? 'active' : '' }}" href="{{ route('admin.pasien.index') }}">Daftar Pasien</a>
-                <a class="collapse-item {{ Request::is('admin/pasien/create') ? 'active' : '' }}" href="{{ route('admin.pasien.create') }}">Tambah Pasien</a>
+                <a class="collapse-item {{ Request::is('admin/pasien') ? 'active' : '' }}" href="{{ route('dokter.periksa.index') }}">Daftar Pasien</a>
+                {{-- <a class="collapse-item {{ Request::is('admin/pasien') ? 'active' : '' }}" href="{{ route('dokter.periksa.riwayat') }}">Riwayat Periksa</a> --}}
+                {{-- <a class="collapse-item {{ Request::is('admin/pasien/create') ? 'active' : '' }}" href="{{ route('dokter.periksa.create') }}">Periksa Pasien</a> --}}
             </div>
         </div>
     </li>
@@ -112,9 +113,9 @@
             data-parent="#accordionSidebar"
         >
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Manajemen Poli:</h6>
-                <a class="collapse-item {{ Request::is('admin/poli') ? 'active' : '' }}" href="{{ route('admin.poli.index') }}">Daftar Poli</a>
-                <a class="collapse-item {{ Request::is('admin/poli/create') ? 'active' : '' }}" href="{{ route('admin.poli.create') }}">Tambah Poli</a>
+                <h6 class="collapse-header">Manajemen Riwayat:</h6>
+                <a class="collapse-item {{ Request::is('admin/poli') ? 'active' : '' }}" href="{{ route('dokter.riwayat.index') }}">Riwayat Pasien</a>
+                {{-- <a class="collapse-item {{ Request::is('admin/poli/create') ? 'active' : '' }}" href="{{ route('admin.poli.create') }}">Tambah Poli</a> --}}
             </div>
         </div>
     </li>
@@ -139,9 +140,8 @@
             data-parent="#accordionSidebar"
         >
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Manajemen Obat:</h6>
-                <a class="collapse-item {{ Request::is('admin/obat') ? 'active' : '' }}" href="{{ route('admin.obat.index') }}">Daftar Obat</a>
-                <a class="collapse-item {{ Request::is('admin/obat/create') ? 'active' : '' }}" href="{{ route('admin.obat.create') }}">Tambah Obat</a>
+                <h6 class="collapse-header">Manajemen Profile:</h6>
+                <a class="collapse-item {{ Request::is('admin/obat') ? 'active' : '' }}" href="{{ route('dokter.profile.edit') }}">Edit Profile</a>
             </div>
         </div>
     </li>

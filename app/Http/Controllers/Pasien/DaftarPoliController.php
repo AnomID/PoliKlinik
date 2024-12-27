@@ -7,7 +7,7 @@ use App\Models\DaftarPoli;
 use App\Models\JadwalPeriksa;
 use App\Models\Poli;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 class DaftarPoliController extends Controller
 {
@@ -159,26 +159,26 @@ class DaftarPoliController extends Controller
     /**
      * Mengambil jadwal_periksa berdasarkan poli yang dipilih (untuk AJAX).
      */
+public function getJadwalPeriksa($poli_id)
+{
+    // Log untuk debugging
+    Log::info('Meminta jadwal_periksa untuk poli_id: ' . $poli_id);
 
-    public function getJadwalPeriksa($poli_id)
-    {
-        // Log untuk debugging
-        Log::info('Meminta jadwal_periksa untuk poli_id: ' . $poli_id);
-
-        // Pastikan Poli ada
-        $poli = Poli::find($poli_id);
-        if (!$poli) {
-            Log::error('Poli tidak ditemukan: ' . $poli_id);
-            return response()->json(['error' => 'Poli tidak ditemukan'], 404);
-        }
-
-        // Ambil jadwal_periksa berdasarkan poli
-        $jadwal = JadwalPeriksa::whereHas('dokter', function($query) use ($poli_id) {
-            $query->where('id_poli', $poli_id);
-        })->with('dokter')->get();
-
-        Log::info('Jumlah jadwal_periksa yang ditemukan: ' . $jadwal->count());
-
-        return response()->json($jadwal);
+    // Pastikan Poli ada
+    $poli = Poli::find($poli_id);
+    if (!$poli) {
+        Log::error('Poli tidak ditemukan: ' . $poli_id);
+        return response()->json(['error' => 'Poli tidak ditemukan'], 404);
     }
+
+    // Ambil jadwal_periksa berdasarkan poli
+    $jadwal = JadwalPeriksa::whereHas('dokter', function($query) use ($poli_id) {
+        $query->where('id_poli', $poli_id);
+    })->with('dokter')->get();
+
+    Log::info('Jumlah jadwal_periksa yang ditemukan: ' . $jadwal->count());
+
+    return response()->json($jadwal);
+}
+
 }

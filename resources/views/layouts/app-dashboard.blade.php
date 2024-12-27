@@ -92,5 +92,6 @@
     <!-- Page level custom scripts -->
     <script src="/build/sb-admin-2/js/demo/chart-area-demo.js"></script>
     <script src="/build/sb-admin-2/js/demo/chart-pie-demo.js"></script>
+        @yield('scripts')
   </body>
 </html>

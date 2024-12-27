@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\ObatController as AdminObatController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Dokter\JadwalPeriksaController;
 use App\Http\Controllers\Dokter\PeriksaPasienController;
+use App\Http\Controllers\Dokter\RiwayatController;
+use App\Http\Controllers\Dokter\ProfileController;
 use App\Http\Controllers\Pasien\DaftarPoliController;
 // use App\Http\Controllers\PasienController as ControllersPasienController;
 use Illuminate\Support\Facades\Route;
@@ -57,9 +59,26 @@ Route::middleware('dokter')->prefix('dokter')->name('dokter.')->group(function (
     Route::get('/dashboard', [DokterController::class, 'dashboard'])->name('dashboard');
     Route::get('/poli', [DokterController::class, 'poli'])->name('poli');
 
+    // Jadwal
     Route::resource('jadwal', JadwalPeriksaController::class);
+    Route::post('/jadwal{id}', [JadwalPeriksaController::class, 'restore'])->name('jadwal.restore');
+    // Route::post('/jadwal', [JadwalPeriksaController::class, 'store'])->name('jadwal.store');
 
-    Route::resource('periksa', PeriksaPasienController::class);
+    // Periksa
+    Route::get('periksa', [PeriksaPasienController::class, 'index'])->name('periksa.index');
+    Route::get('/periksa', [PeriksaPasienController::class, 'index'])->name('periksa.index');
+    Route::get('/periksa/create/{id}', [PeriksaPasienController::class, 'create'])->name('periksa.create');
+    Route::post('/periksa', [PeriksaPasienController::class, 'store'])->name('periksa.store');
+
+    // Riwayat
+    Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
+    Route::get('/riwayat/{id}', [RiwayatController::class, 'detail'])->name('riwayat.detail');
+
+    // Profile
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+
 });
 
 // Pasien Routes (Protected by 'pasien' middleware)
@@ -67,11 +86,9 @@ Route::middleware('pasien')->prefix('pasien')->name('pasien.')->group(function (
     Route::get('/dashboard', [PasienController::class, 'dashboard'])->name('dashboard');
     Route::get('/daftar-periksa', [PasienController::class, 'daftarPeriksa'])->name('daftar.periksa');
 
-    // Resource routes untuk DaftarPoliController
     Route::resource('daftar', DaftarPoliController::class);
-
-    // Rute tambahan untuk AJAX mengambil jadwal_periksa
     Route::get('daftar/get-jadwal/{poli_id}', [DaftarPoliController::class, 'getJadwalPeriksa'])->name('daftar.get-jadwal');
+
 });
 // Logout Routes
 Route::prefix('logout')->name('logout.')->group(function () {

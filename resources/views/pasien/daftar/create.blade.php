@@ -85,8 +85,13 @@
       idJadwalSelect.innerHTML = '<option value="" disabled selected>Loading...</option>';
 
       if (poliId) {
-        fetch(`{{ route('pasien.daftar.get-jadwal', '') }}/${poliId}`)
-          .then(response => response.json())
+        fetch(`/pasien/daftar/get-jadwal/${poliId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
           .then(data => {
             let options = '<option value="" disabled selected>Pilih Jadwal Periksa</option>';
             data.forEach(function(jadwal) {
