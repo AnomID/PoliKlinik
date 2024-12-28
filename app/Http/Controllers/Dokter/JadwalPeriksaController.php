@@ -9,10 +9,16 @@ use Illuminate\Http\Request;
 
 class JadwalPeriksaController extends Controller
 {
+
     public function index()
     {
-        // Memuat semua jadwal termasuk yang di-soft delete
-        $jadwalPeriksa = JadwalPeriksa::withTrashed()->with(['dokter.poli'])->get();
+        $dokterId = session('dokter_id');
+        // Cek apakah dokter_id ada di session
+        if (!$dokterId) {
+            return redirect()->route('dokter.loginForm')->withErrors(['error' => 'Anda harus login terlebih dahulu.']);
+        }
+        // Memuat semua jadwal yang berkaitan dengan dokter yang login, termasuk yang di-soft delete
+        $jadwalPeriksa = JadwalPeriksa::withTrashed()->where('id_dokter', $dokterId)->with(['dokter.poli'])->get();
         return view('dokter.jadwal.index')->with('jadwalPeriksa', $jadwalPeriksa);
     }
 
@@ -50,7 +56,7 @@ class JadwalPeriksaController extends Controller
 
     public function show()
     {
-        // Implementasikan jika diperlukan
+
     }
 
     public function edit($id)

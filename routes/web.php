@@ -13,7 +13,6 @@ use App\Http\Controllers\Dokter\PeriksaPasienController;
 use App\Http\Controllers\Dokter\RiwayatController;
 use App\Http\Controllers\Dokter\ProfileController;
 use App\Http\Controllers\Pasien\DaftarPoliController;
-// use App\Http\Controllers\PasienController as ControllersPasienController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -85,7 +84,6 @@ Route::middleware('dokter')->prefix('dokter')->name('dokter.')->group(function (
 Route::middleware('pasien')->prefix('pasien')->name('pasien.')->group(function () {
     Route::get('/dashboard', [PasienController::class, 'dashboard'])->name('dashboard');
     Route::get('/daftar-periksa', [PasienController::class, 'daftarPeriksa'])->name('daftar.periksa');
-
     Route::resource('daftar', DaftarPoliController::class);
     Route::get('daftar/get-jadwal/{poli_id}', [DaftarPoliController::class, 'getJadwalPeriksa'])->name('daftar.get-jadwal');
 

@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 
 class PasienController extends Controller
 {
-    /**
-     * Tampilkan daftar semua pasien.
-     */
+    // Tampilan daftar semua pasien
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -25,34 +23,47 @@ class PasienController extends Controller
         return view('admin.pasien.index', compact('polisens'));
     }
 
-        /**
-     * Tampilkan detail pasien.
-     */
+    // Tampilan detail pasien
     public function show(Pasien $pasien)
     {
         return view('admin.pasien.show', compact('pasien'));
     }
 
-    /**
-     * Tampilkan form untuk mengedit pasien.
-     */
+    // Tampilan form edit
     public function edit(Pasien $pasien)
     {
         return view('admin.pasien.edit', compact('pasien'));
     }
 
-
-    /**
-     * Tampilkan form untuk membuat pasien baru.
-     */
+    // Tampilan form pasien bary
     public function create()
     {
         return view('admin.pasien.create');
     }
 
-    /**
-     * Simpan pasien baru ke database.
-     */
+    // Generate No Rm
+    private function generateNoRm()
+    {
+        $year = date('Y'); //  tahun sekarang
+        $date = date('d'); //  tanggal sekarang
+        $prefix = $year . $date; // Format: XXXXYY
+
+        // Mencari nomor RM terakhir dengan prefix yang sama
+        $lastPasien = Pasien::where('no_rm', 'like', $prefix . '-%')
+                        ->orderBy('no_rm', 'desc')
+                        ->first();
+
+        if ($lastPasien) {
+            // Jika sudah ada, ambil nomor urut terakhir dan tambahkan 1
+            $lastNumber = intval(substr($lastPasien->no_rm, -2));
+            $newNumber = str_pad($lastNumber + 1, 2, '0', STR_PAD_LEFT);
+        } else {
+            // Jika belum ada, mulai dari 01
+            $newNumber = '01';
+        }
+
+        return $prefix . '-' . $newNumber;
+    }
 
     public function store(Request $request)
     {
@@ -74,9 +85,8 @@ class PasienController extends Controller
                              ->withErrors(['nama' => 'Nama dan Alamat sudah terdaftar.']);
         }
 
-        // Generate new no_rm
-        $lastPasien = Pasien::orderBy('no_rm', 'desc')->first();
-        $newNoRm = $lastPasien ? $lastPasien->no_rm + 1 : 1;
+        // Generate new no_rm dengan format baru
+        $newNoRm = $this->generateNoRm();
 
         // Create new pasien
         Pasien::create([
@@ -89,10 +99,7 @@ class PasienController extends Controller
 
         return redirect()->route('admin.pasien.index')->with('success', 'Pasien berhasil didaftarkan!');
     }
-
-    /**
-     * Update pasien di database.
-     */
+    // Update
     public function update(Request $request, Pasien $pasien)
     {
         // Validasi input
@@ -110,9 +117,7 @@ class PasienController extends Controller
                          ->with('success', 'Pasien berhasil diperbarui.');
     }
 
-    /**
-     * Hapus pasien dari database.
-     */
+    // Hapus pasien
     public function destroy(Pasien $pasien)
     {
         // Pastikan tidak ada daftar poli yang terkait dengan pasien ini sebelum menghapus

@@ -11,9 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class DaftarPoliController extends Controller
 {
-    /**
-     * Menampilkan daftar semua pendaftaran poli untuk pasien yang login.
-     */
+
+    // Menampilkan daftar semua pendaftaran poli untuk pasien yang login.
     public function index()
     {
         $pasien_id = session('pasien_id');
@@ -24,9 +23,8 @@ class DaftarPoliController extends Controller
         return view('pasien.daftar.index', compact('daftarPoli'));
     }
 
-    /**
-     * Menampilkan formulir untuk membuat pendaftaran poli baru.
-     */
+
+    // Menampilkan formulir untuk membuat pendaftaran poli baru.
     public function create()
     {
         $pasien = \App\Models\Pasien::find(session('pasien_id'));
@@ -35,9 +33,8 @@ class DaftarPoliController extends Controller
         return view('pasien.daftar.create', compact('pasien', 'polis'));
     }
 
-    /**
-     * Menyimpan pendaftaran poli baru ke dalam database.
-     */
+
+    // Menyimpan pendaftaran poli baru ke dalam database.
     public function store(Request $request)
     {
         $request->validate([
@@ -47,7 +44,7 @@ class DaftarPoliController extends Controller
 
         // Verifikasi bahwa jadwal_periksa sesuai dengan poli yang dipilih
         $jadwalPeriksa = JadwalPeriksa::with('dokter.poli')->findOrFail($request->id_jadwal);
-        $poli_id = $request->input('id_poli'); // Pastikan Anda mengirim 'id_poli' dari formulir
+        $poli_id = $request->input('id_poli');
 
         if ($jadwalPeriksa->dokter->poli->id != $poli_id) {
             return back()->withErrors(['id_jadwal' => 'Jadwal periksa yang dipilih tidak sesuai dengan poli yang dipilih.'])->withInput();
@@ -67,9 +64,8 @@ class DaftarPoliController extends Controller
         return redirect()->route('pasien.daftar.index')->with('success', 'Pendaftaran poli berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan detail pendaftaran poli tertentu.
-     */
+
+    // Menampilkan detail pendaftaran poli tertentu.
     public function show($id)
     {
         $daftarPoli = DaftarPoli::with(['pasien', 'jadwalPeriksa.dokter.poli', 'periksa'])
@@ -79,13 +75,11 @@ class DaftarPoliController extends Controller
         if ($daftarPoli->id_pasien != session('pasien_id')) {
             abort(403, 'Aksi tidak diizinkan.');
         }
-
         return view('pasien.daftar.show', compact('daftarPoli'));
     }
 
-    /**
-     * Menampilkan formulir untuk mengedit pendaftaran poli tertentu.
-     */
+
+    // Menampilkan formulir untuk mengedit pendaftaran poli tertentu.
     public function edit($id)
     {
         $daftarPoli = DaftarPoli::with(['jadwalPeriksa.dokter.poli'])->findOrFail($id);
@@ -103,10 +97,7 @@ class DaftarPoliController extends Controller
 
         return view('pasien.daftar.edit', compact('daftarPoli', 'polis', 'jadwalPeriksas'));
     }
-
-    /**
-     * Memperbarui pendaftaran poli tertentu dalam database.
-     */
+    // Update data daftar poli
     public function update(Request $request, $id)
     {
         $daftarPoli = DaftarPoli::findOrFail($id);
@@ -123,7 +114,7 @@ class DaftarPoliController extends Controller
 
         // Verifikasi bahwa jadwal_periksa sesuai dengan poli yang dipilih
         $jadwalPeriksa = JadwalPeriksa::with('dokter.poli')->findOrFail($request->id_jadwal);
-        $poli_id = $request->input('id_poli'); // Pastikan Anda mengirim 'id_poli' dari formulir
+        $poli_id = $request->input('id_poli');
 
         if ($jadwalPeriksa->dokter->poli->id != $poli_id) {
             return back()->withErrors(['id_jadwal' => 'Jadwal periksa yang dipilih tidak sesuai dengan poli yang dipilih.'])->withInput();
@@ -133,15 +124,13 @@ class DaftarPoliController extends Controller
         $daftarPoli->update([
             'id_jadwal' => $request->id_jadwal,
             'keluhan' => $request->keluhan,
-            // 'no_antrian' bisa diperbarui jika diperlukan
+            // 'no_antrian' => $request->no_antrian,
         ]);
 
         return redirect()->route('pasien.daftar.index')->with('success', 'Pendaftaran poli berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus pendaftaran poli tertentu dari database.
-     */
+    // Hapus pendaftaran poli
     public function destroy($id)
     {
         $daftarPoli = DaftarPoli::findOrFail($id);
@@ -156,29 +145,25 @@ class DaftarPoliController extends Controller
         return redirect()->route('pasien.daftar.index')->with('success', 'Pendaftaran poli berhasil dihapus.');
     }
 
-    /**
-     * Mengambil jadwal_periksa berdasarkan poli yang dipilih (untuk AJAX).
-     */
-public function getJadwalPeriksa($poli_id)
-{
-    // Log untuk debugging
-    Log::info('Meminta jadwal_periksa untuk poli_id: ' . $poli_id);
 
-    // Pastikan Poli ada
-    $poli = Poli::find($poli_id);
-    if (!$poli) {
+    // Mengambil jadwal_periksa berdasarkan poli yang dipilih (untuk AJAX).
+
+    public function getJadwalPeriksa($poli_id)
+    {
+        // Log untuk debugging
+        Log::info('Meminta jadwal_periksa untuk poli_id: ' . $poli_id);
+        // Pastikan Poli ada
+        $poli = Poli::find($poli_id);
+        if (!$poli) {
         Log::error('Poli tidak ditemukan: ' . $poli_id);
         return response()->json(['error' => 'Poli tidak ditemukan'], 404);
+        }
+        // Ambil jadwal_periksa berdasarkan poli
+        $jadwal = JadwalPeriksa::whereHas('dokter', function($query) use ($poli_id) {
+            $query->where('id_poli', $poli_id);
+        })->with('dokter')->get();
+        Log::info('Jumlah jadwal_periksa yang ditemukan: ' . $jadwal->count());
+        return response()->json($jadwal);
     }
-
-    // Ambil jadwal_periksa berdasarkan poli
-    $jadwal = JadwalPeriksa::whereHas('dokter', function($query) use ($poli_id) {
-        $query->where('id_poli', $poli_id);
-    })->with('dokter')->get();
-
-    Log::info('Jumlah jadwal_periksa yang ditemukan: ' . $jadwal->count());
-
-    return response()->json($jadwal);
-}
 
 }

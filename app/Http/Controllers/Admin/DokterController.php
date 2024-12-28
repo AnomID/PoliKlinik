@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class DokterController extends Controller
 {
-
      //Tampilkan daftar semua dokter.
     public function index(Request $request)
     {
@@ -35,7 +34,6 @@ class DokterController extends Controller
         return view('admin.dokter.create', compact('polis'));
     }
 
-
      //Simpan dokter baru ke database.
     public function store(Request $request)
     {
@@ -53,7 +51,6 @@ class DokterController extends Controller
                          ->with('success', 'Dokter berhasil ditambahkan.');
     }
 
-
      // Tampilkan detail dokter.
     public function show(Dokter $dokter)
     {
@@ -62,7 +59,6 @@ class DokterController extends Controller
 
 
      // Tampilkan form untuk mengedit dokter.
-
     public function edit(Dokter $dokter)
     {
         $polis = Poli::all();

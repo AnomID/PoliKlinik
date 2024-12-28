@@ -8,26 +8,19 @@ use Illuminate\Http\Request;
 
 class PoliController extends Controller
 {
-    /**
-     * Tampilkan daftar semua poli.
-     */
+    // Talpilan daftar poli
     public function index()
     {
         $polis = Poli::paginate(10);
         return view('admin.poli.index', compact('polis'));
     }
 
-    /**
-     * Tampilkan form untuk membuat poli baru.
-     */
+    // Tampilan form poli baru
     public function create()
     {
         return view('admin.poli.create');
     }
 
-    /**
-     * Simpan poli baru ke database.
-     */
     public function store(Request $request)
     {
         // Validasi input
@@ -42,25 +35,19 @@ class PoliController extends Controller
                          ->with('success', 'Poli berhasil ditambahkan.');
     }
 
-    /**
-     * Tampilkan detail poli.
-     */
+    // Detail Poli
     public function show(Poli $poli)
     {
         return view('admin.poli.show', compact('poli'));
     }
 
-    /**
-     * Tampilkan form untuk mengedit poli.
-     */
+    // Form edit
     public function edit(Poli $poli)
     {
         return view('admin.poli.edit', compact('poli'));
     }
 
-    /**
-     * Update poli di database.
-     */
+    // Store Edit
     public function update(Request $request, Poli $poli)
     {
         // Validasi input
@@ -75,9 +62,7 @@ class PoliController extends Controller
                          ->with('success', 'Poli berhasil diperbarui.');
     }
 
-    /**
-     * Hapus poli dari database.
-     */
+    // Hapus
     public function destroy(Poli $poli)
     {
         // Pastikan tidak ada dokter yang terkait dengan poli ini sebelum menghapus

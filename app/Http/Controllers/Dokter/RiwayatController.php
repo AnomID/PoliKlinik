@@ -15,10 +15,9 @@ class RiwayatController extends Controller
 {
     public function index()
     {
-        // Get dokter_id from session
+        // Get session id dokter
         $dokter_id = session('dokter_id');
-
-        // Get unique patients with their latest check-up
+        // Get riwayat pasien yang mempunyai daftar poli berdasrkan jadwal periksa
         $riwayatPasien = Pasien::whereHas('daftarPoli.jadwalPeriksa', function($query) use ($dokter_id) {
                 $query->where('id_dokter', $dokter_id);
             })
@@ -30,7 +29,7 @@ class RiwayatController extends Controller
             }])
             ->get()
             ->map(function($pasien) {
-                // Add count of total check-ups for this patient
+                // tambah data periksa pasien
                 $pasien->total_periksa = $pasien->daftarPoli->filter(function($daftar) {
                     return $daftar->periksa !== null;
                 })->count();
@@ -44,10 +43,10 @@ class RiwayatController extends Controller
     {
         $dokter_id = session('dokter_id');
 
-        // Get patient data
+        // Get data pasien
         $pasien = Pasien::findOrFail($id_pasien);
 
-        // Get all check-ups for this patient with this doctor
+        // Get semua data periksa berdasarkan dokter id dokter
         $riwayatPeriksa = Periksa::whereHas('daftarPoli', function($query) use ($dokter_id, $id_pasien) {
                 $query->whereHas('jadwalPeriksa', function($q) use ($dokter_id) {
                     $q->where('id_dokter', $dokter_id);

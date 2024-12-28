@@ -4,15 +4,10 @@ namespace App\Http\Controllers\Dokter;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Dokter; // Pastikan sudah meng-import model Dokter
+use App\Models\Dokter;
 
 class ProfileController extends Controller
 {
-    /**
-     * Menampilkan form edit profile dokter.
-     *
-     * @return \Illuminate\View\View
-     */
     public function edit()
     {
         // Ambil ID dokter dari session (sesuai dengan logika yang Anda buat di middleware)
@@ -25,12 +20,6 @@ class ProfileController extends Controller
         return view('dokter.profile.edit', compact('dokter'));
     }
 
-    /**
-     * Update data profile dokter.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function update(Request $request)
     {
         // Ambil ID dokter dari session
@@ -53,7 +42,7 @@ class ProfileController extends Controller
             'no_hp'  => $request->no_hp,
         ]);
 
-        // Redirect ke halaman dashboard atau ke mana pun yang Anda inginkan
+        // Redirect ke halaman edit
         return redirect()
             ->route('dokter.profile.edit')
             ->with('success', 'Profile berhasil diperbarui.');

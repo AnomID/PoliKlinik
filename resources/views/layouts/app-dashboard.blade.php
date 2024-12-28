@@ -12,6 +12,7 @@
 
     <title>Poliklinik - Dashboard</title>
 
+
     <!-- Custom fonts for this template-->
     <link
       href="/build/sb-admin-2/vendor/fontawesome-free/css/all.min.css"
@@ -25,6 +26,7 @@
 
     <!-- Custom styles for this template-->
     <link href="/build/sb-admin-2/css/sb-admin-2.min.css" rel="stylesheet" />
+
   </head>
 
   <body id="page-top">
@@ -93,5 +95,6 @@
     <script src="/build/sb-admin-2/js/demo/chart-area-demo.js"></script>
     <script src="/build/sb-admin-2/js/demo/chart-pie-demo.js"></script>
         @yield('scripts')
+        @stack('scripts')
   </body>
 </html>

@@ -48,8 +48,33 @@ class PasienController extends Controller
     }
 
     // TODO : Register Pasien
-    public function store(Request $request)
+    // Generate No Rm
+    private function generateNoRm()
     {
+        $year = date('Y'); //  tahun sekarang
+        $date = date('d'); //  tanggal sekarang
+        $prefix = $year . $date; // Format: XXXXYY
+
+        // Mencari nomor RM terakhir dengan prefix yang sama
+        $lastPasien = Pasien::where('no_rm', 'like', $prefix . '-%')
+                        ->orderBy('no_rm', 'desc')
+                        ->first();
+
+        if ($lastPasien) {
+            // Jika sudah ada, ambil nomor urut terakhir dan tambahkan 1
+            $lastNumber = intval(substr($lastPasien->no_rm, -2));
+            $newNumber = str_pad($lastNumber + 1, 2, '0', STR_PAD_LEFT);
+        } else {
+            // Jika belum ada, mulai dari 01
+            $newNumber = '01';
+        }
+
+        return $prefix . '-' . $newNumber;
+    }
+
+       public function store(Request $request)
+    {
+        // Validate input
         $request->validate([
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string',
@@ -57,6 +82,7 @@ class PasienController extends Controller
             'no_hp' => 'required|numeric',
         ]);
 
+        // Check for existing pasien
         $existingPasien = Pasien::where('nama', $request->nama)
                                 ->where('alamat', $request->alamat)
                                 ->first();
@@ -66,9 +92,10 @@ class PasienController extends Controller
                              ->withErrors(['nama' => 'Nama dan Alamat sudah terdaftar.']);
         }
 
-        $lastPasien = Pasien::orderBy('no_rm', 'desc')->first();
-        $newNoRm = $lastPasien ? $lastPasien->no_rm + 1 : 1;
+        // Generate new no_rm dengan format baru
+        $newNoRm = $this->generateNoRm();
 
+        // Create new pasien
         Pasien::create([
             'nama' => $request->nama,
             'alamat' => $request->alamat,
