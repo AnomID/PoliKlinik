@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DokterController as AdminDokterController;
 use App\Http\Controllers\Admin\PasienController as AdminPasienController;
 use App\Http\Controllers\Admin\PoliController as AdminPoliController;
 use App\Http\Controllers\Admin\ObatController as AdminObatController;
+use App\Http\Controllers\Admin\RiwayatController as AdminRiwayatController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Dokter\JadwalPeriksaController;
 use App\Http\Controllers\Dokter\PeriksaPasienController;
@@ -43,7 +44,8 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
     // CRUD Routes untuk Pasien
     Route::resource('pasien', AdminPasienController::class);
-
+    Route::get('/riwayat', [AdminRiwayatController::class, 'index'])->name('riwayat.index');
+    Route::get('/riwayat/{id}', [AdminRiwayatController::class, 'detail'])->name('riwayat.detail');
     // CRUD Routes untuk Poli
     Route::resource('poli', AdminPoliController::class);
 

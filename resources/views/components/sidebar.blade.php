@@ -1,4 +1,3 @@
-<!-- resources/views/components/sidebar.blade.php -->
 <ul
     class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
     id="accordionSidebar"
@@ -82,6 +81,7 @@
                 <h6 class="collapse-header">Manajemen Pasien:</h6>
                 <a class="collapse-item {{ Request::is('admin/pasien') ? 'active' : '' }}" href="{{ route('admin.pasien.index') }}">Daftar Pasien</a>
                 <a class="collapse-item {{ Request::is('admin/pasien/create') ? 'active' : '' }}" href="{{ route('admin.pasien.create') }}">Tambah Pasien</a>
+                <a class="collapse-item {{ Request::is('admin/pasien/riwayat*') ? 'active' : '' }}" href="{{ route('admin.riwayat.index') }}">Riwayat Pasien</a>
             </div>
         </div>
     </li>
