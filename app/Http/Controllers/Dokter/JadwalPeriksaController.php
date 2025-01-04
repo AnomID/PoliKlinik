@@ -96,16 +96,26 @@ class JadwalPeriksaController extends Controller
         return redirect()->route('dokter.jadwal.index')->with('success', 'Jadwal periksa berhasil dinonaktifkan.');
     }
 
-    // Aktifka Jadwal
+    // Aktifka Jadwaln
     public function restore($id)
     {
         $jadwal = JadwalPeriksa::withTrashed()->findOrFail($id);
-
+    
+        // Cek apakah jadwal sudah terhapus (trashed)
         if ($jadwal->trashed()) {
+            $jadwalCount = JadwalPeriksa::where('id_dokter', $jadwal->id_dokter)
+                                         ->whereNull('deleted_at') // Mencari nilai delete_at yang kosong (tidak dihapus)
+                                         ->count();
+    
+            if ($jadwalCount >= 1) {
+                return redirect()->route('dokter.jadwal.index')->with('error', 'Dokter ini sudah memiliki jadwal aktif. Tidak bisa mengaktifkan jadwal ini.');
+            }
+    
             $jadwal->restore();
             return redirect()->route('dokter.jadwal.index')->with('success', 'Jadwal periksa berhasil diaktifkan.');
         }
-
+    
         return redirect()->route('dokter.jadwal.index')->with('info', 'Jadwal periksa tidak dalam keadaan terhapus.');
     }
+    
 }
