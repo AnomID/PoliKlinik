@@ -48,7 +48,7 @@ class PeriksaPasienController extends Controller
         ]);
 
         try {
-            // Create periksa record
+            // Create periksa 
             $periksa = new Periksa([
                 'id_daftar_poli' => $request->id_daftar_poli,
                 'tgl_periksa' => $request->tgl_periksa,
@@ -57,7 +57,7 @@ class PeriksaPasienController extends Controller
             ]);
             $periksa->save();
 
-            // Create detail_periksa records and update obat stock
+            // detail_periksa dan update obat stock
             foreach($request->obat_id as $index => $obatId) {
                 $obat = Obat::find($obatId);
                 $jumlah = $request->jumlah[$index];
@@ -67,7 +67,7 @@ class PeriksaPasienController extends Controller
                     throw new \Exception("Stok obat {$obat->nama_obat} tidak mencukupi");
                 }
 
-                // Create detail
+                //  detail periksa
                 $detailPeriksa = new DetailPeriksa([
                     'id_periksa' => $periksa->id,
                     'id_obat' => $obatId,

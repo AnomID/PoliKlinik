@@ -43,17 +43,17 @@
               @foreach($daftarPoli as $index => $daftar)
                 <tr>
                   <td>{{ $index + 1 }}</td>
-                  <td>{{ $daftar->pasien->no_rm }}</td>
-                  <td>{{ $daftar->jadwalPeriksa->dokter->poli->nama_poli }}</td>
-                  <td>{{ $daftar->jadwalPeriksa->dokter->nama }}</td>
-                  <td>{{ $daftar->jadwalPeriksa->hari }}</td>
-                  <td>{{ $daftar->jadwalPeriksa->jam_mulai }} - {{ $daftar->jadwalPeriksa->jam_selesai }}</td>
-                  <td>{{ $daftar->no_antrian }}</td>
-                  <td>{{ $daftar->keluhan }}</td>
+                  <td>{{ $daftar->no_rm ?? '-' }}</td>
+                  <td>{{ $daftar->nama_poli ?? 'Poli dihapus' }}</td>
+                  <td>{{ $daftar->nama_dokter ?? 'Dokter dihapus' }}</td>
+                  <td>{{ $daftar->hari ?? '-' }}</td>
+                  <td>{{ $daftar->jam_mulai ?? '-' }} - {{ $daftar->jam_selesai ?? '-' }}</td>
+                  <td>{{ $daftar->no_antrian ?? '-' }}</td>
+                  <td>{{ $daftar->keluhan ?? '-' }}</td>
                   <td>
-                    <a href="{{ route('pasien.daftar.show', $daftar->id) }}" class="btn btn-info btn-sm">Detail</a>
-                    <a href="{{ route('pasien.daftar.edit', $daftar->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('pasien.daftar.destroy', $daftar->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pendaftaran ini?');">
+                    <a href="{{ route('pasien.daftar.show', $daftar->daftar_poli_id) }}" class="btn btn-info btn-sm">Detail</a>
+                    <a href="{{ route('pasien.daftar.edit', $daftar->daftar_poli_id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{{ route('pasien.daftar.destroy', $daftar->daftar_poli_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pendaftaran ini?');">
                       @csrf
                       @method('DELETE')
                       <button class="btn btn-danger btn-sm">Hapus</button>

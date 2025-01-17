@@ -52,8 +52,8 @@ class PasienController extends Controller
     private function generateNoRm()
     {
         $year = date('Y'); //  tahun sekarang
-        $date = date('d'); //  tanggal sekarang
-        $prefix = $year . $date; // Format: XXXXYY
+        $month = date('m'); //  bulan sekarang
+        $prefix = $year . $month; // Format: YYYYmm
 
         // Mencari nomor RM terakhir dengan prefix yang sama
         $lastPasien = Pasien::where('no_rm', 'like', $prefix . '-%')
