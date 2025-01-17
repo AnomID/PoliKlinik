@@ -53,7 +53,8 @@ class PasienController extends Controller
     {
         $year = date('Y'); //  tahun sekarang
         $month = date('m'); //  bulan sekarang
-        $prefix = $year . $month; // Format: YYYYmm
+
+        $prefix = $year . $month; // Format: YYYYMM
 
         // Mencari nomor RM terakhir dengan prefix yang sama
         $lastPasien = Pasien::where('no_rm', 'like', $prefix . '-%')

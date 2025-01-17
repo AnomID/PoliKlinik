@@ -138,7 +138,6 @@
     </div> --}}
 
     <!-- Chart.js Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var ctx = document.getElementById('pasienChart').getContext('2d');
         var pasienChart = new Chart(ctx, {
