@@ -46,20 +46,7 @@
                     <p>{{ $pasien->no_rm }}</p>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h5><strong>Daftar Poli:</strong></h5>
-                    @if($pasien->daftarPoli->count() > 0)
-                        <ul>
-                            @foreach($pasien->daftarPoli as $daftarPoli)
-                                <li>{{ $daftarPoli->poli->nama_poli }} - {{ $daftarPoli->tanggal }}</li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p>Tidak ada daftar poli terkait.</p>
-                    @endif
-                </div>
-            </div>
+
         </div>
     </div>
 @endsection

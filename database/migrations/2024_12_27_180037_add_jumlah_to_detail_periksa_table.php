@@ -12,14 +12,12 @@ return new class extends Migration
 public function up()
 {
     Schema::table('detail_periksa', function (Blueprint $table) {
-        $table->integer('jumlah')->after('id_obat');
     });
 }
 
 public function down()
 {
     Schema::table('detail_periksa', function (Blueprint $table) {
-        $table->dropColumn('jumlah');
     });
 }
 

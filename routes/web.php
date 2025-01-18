@@ -13,7 +13,9 @@ use App\Http\Controllers\Dokter\JadwalPeriksaController;
 use App\Http\Controllers\Dokter\PeriksaPasienController;
 use App\Http\Controllers\Dokter\RiwayatController;
 use App\Http\Controllers\Dokter\ProfileController;
+use App\Http\Controllers\Dokter\KonsultasiController as DokterKonsulController;
 use App\Http\Controllers\Pasien\DaftarPoliController;
+use App\Http\Controllers\KonsultasiController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -79,6 +81,9 @@ Route::middleware('dokter')->prefix('dokter')->name('dokter.')->group(function (
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
+    // Konsultasi
+    Route::resource('konsultasi', DokterKonsulController::class);
+
 
 });
 
@@ -88,6 +93,7 @@ Route::middleware('pasien')->prefix('pasien')->name('pasien.')->group(function (
     Route::get('/daftar-periksa', [PasienController::class, 'daftarPeriksa'])->name('daftar.periksa');
     Route::resource('daftar', DaftarPoliController::class);
     Route::get('daftar/get-jadwal/{poli_id}', [DaftarPoliController::class, 'getJadwalPeriksa'])->name('daftar.get-jadwal');
+    Route::resource('konsultasi', KonsultasiController::class);
 
 });
 // Logout Routes

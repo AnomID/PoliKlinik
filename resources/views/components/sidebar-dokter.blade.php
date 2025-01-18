@@ -120,6 +120,33 @@
         </div>
     </li>
 
+    <!-- Konsultasi -->
+    <li class="nav-item {{ Request::is('admin/konsul*') ? 'active' : '' }}">
+        <a
+            class="nav-link collapsed"
+            href="#"
+            data-toggle="collapse"
+            data-target="#collapseKonsul"
+            aria-expanded="{{ Request::is('admin/poli*') ? 'true' : 'false' }}"
+            aria-controls="collapsePoli"
+        >
+            <i class="nav-icon fas fa-hospital"></i>
+            <span>Konsultasi Pasien</span>
+        </a>
+        <div
+            id="collapseKonsul"
+            class="collapse {{ Request::is('admin/poli*') ? 'show' : '' }}"
+            aria-labelledby="headingPoli"
+            data-parent="#accordionSidebar"
+        >
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Manajemen Konsultasi:</h6>
+                <a class="collapse-item {{ Request::is('admin/poli') ? 'active' : '' }}" href="{{ route('dokter.konsultasi.index') }}">Konsultasi Pasien</a>
+                <!-- {{-- <a class="collapse-item {{ Request::is('admin/poli/create') ? 'active' : '' }}" href="{{ route('dokter.konsultasi.create') }}">Tambah Poli</a> --}} -->
+            </div>
+        </div>
+    </li>
+
     <!-- Nav Item - Obat Collapse Menu -->
     <li class="nav-item {{ Request::is('admin/obat*') ? 'active' : '' }}">
         <a

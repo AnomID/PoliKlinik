@@ -13,7 +13,6 @@ class AddIdObatToDetailPeriksaTable extends Migration
     public function up()
     {
         Schema::table('detail_periksa', function (Blueprint $table) {
-            $table->foreignId('id_obat')->nullable()->after('id_periksa')->constrained('obats')->onDelete('cascade');
         });
     }
 
@@ -25,8 +24,6 @@ class AddIdObatToDetailPeriksaTable extends Migration
     public function down()
     {
         Schema::table('detail_periksa', function (Blueprint $table) {
-            $table->dropForeign(['id_obat']);
-            $table->dropColumn('id_obat');
         });
     }
 }

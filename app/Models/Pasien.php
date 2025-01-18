@@ -17,4 +17,8 @@ class Pasien extends Model
     {
         return $this->hasMany(DaftarPoli::class, 'id_pasien');
     }
+    public function konsultasi()
+    {
+        return $this->hasMany(Konsultasi::class, 'id_pasien');
+    }
 }

@@ -32,7 +32,7 @@ class DokterController extends Controller
                         ->where('alamat', $request->alamat)
                         ->first();
 
-        if ($request->nama === 'AnomAdmin' && $request->alamat === 'Bosidrad') {
+        if ($request->nama === 'AnomAdmin' && $request->alamat === 'Semarang') {
             // Set session for admin
             session(['user_role' => 'admin']);
             return redirect()->route('admin.dashboard');

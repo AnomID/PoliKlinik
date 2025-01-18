@@ -12,18 +12,14 @@ return new class extends Migration
 public function up(): void
 {
     Schema::table('detail_periksa', function (Blueprint $table) {
-        $table->foreignId('id_periksa')
-              ->constrained('periksa')
-              ->onDelete('cascade')
-              ->onUpdate('cascade');
+
     });
 }
 
 public function down(): void
 {
     Schema::table('detail_periksa', function (Blueprint $table) {
-        $table->dropForeign(['id_periksa']);
-        $table->dropColumn('id_periksa');
+
     });
 }
 

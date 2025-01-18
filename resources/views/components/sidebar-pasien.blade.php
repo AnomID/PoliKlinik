@@ -60,6 +60,7 @@
                 <h6 class="collapse-header">Manajemen Pasien:</h6>
                 <a class="collapse-item {{ Request::is('admin/dokter') ? 'active' : '' }}" href="{{ route('pasien.daftar.create') }}">Ajukan Pendaftaran</a>
                 <a class="collapse-item {{ Request::is('admin/dokter/create') ? 'active' : '' }}" href="{{ route('pasien.daftar.index') }}">History Pendaftaran</a>
+                <a class="collapse-item {{ Request::is('admin/dokter/create') ? 'active' : '' }}" href="{{ route('pasien.konsultasi.index') }}">Konsultasi</a>
             </div>
         </div>
     </li>
